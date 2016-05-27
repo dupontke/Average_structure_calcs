@@ -1,0 +1,15 @@
+Number of steps to be averaged over : 10000
+Beginning trajectory analysis
+Loading trajectory 20
+Loading trajectory 21
+10000
+10000
+7205
+Finished with the trajectory analysis
+Beginning iterative process of calculating average positions and aligning to the average
+Steps: 1, RMSD btw alignment atoms: 2.937492e-01, RMSD btw all atoms: 3.841761e-01
+Steps: 2, RMSD btw alignment atoms: 1.977950e-05, RMSD btw all atoms: 2.216048e-05
+Steps: 3, RMSD btw alignment atoms: 6.378876e-06, RMSD btw all atoms: 6.157890e-06
+Average structure has converged
+Writing a pdb of the average structure.
+Finished writing pdb of the average structure
