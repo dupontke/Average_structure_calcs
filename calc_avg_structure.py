@@ -10,7 +10,6 @@ import sys
 import numpy as np
 from numpy.linalg import *
 import MDAnalysis
-#from MDAnalysis.analysis.rms import *
 from MDAnalysis.analysis.align import *
 from distance_functions import *
 

@@ -10,7 +10,7 @@ import sys
 import numpy as np
 from numpy.linalg import *
 import MDAnalysis
-from MDAnalysis.analysis.rms import *
+from MDAnalysis.analysis.align import *
 from distance_functions import *
 
 # ----------------------------------------
@@ -40,7 +40,7 @@ def ffprint(string):
 # MAIN PROGRAM:
 
 # LOAD IN AVERAGE SUMMARY FILE AND CALCULATE THE IMPORTANT NUMBERS
-average_list = np.loadtxt('%' %(input_file))
+average_list = np.loadtxt('%s' %(input_file))
 
 nAverages = len(average_list)
 nSteps = np.sum(average_list[:,2])
@@ -112,11 +112,11 @@ while residual > thresh and iteration < maxIter:
 	iteration += 1
 	avgCoord = tempAvgCoord
 	avgAlign = tempAvgAlign
-	ffprint('Steps: %d, RMSD btw alignment atoms: %f, RMSD btw all atoms: %f' %(iteration,residual,rmsd_all))
+	ffprint('Steps: %d, RMSD btw alignment atoms: %e, RMSD btw all atoms: %e' %(iteration,residual,rmsd_all))
 
 ffprint('Average structure has converged')
 
-u_important.set_postions(avgCoord)
+u_important.set_positions(avgCoord)
 u_important.write('%03d.%03d.average_structure.pdb' %(average_list[0][0],average_list[-1][1]))
 ffprint('Finished writing pdb of the average structure')
 
