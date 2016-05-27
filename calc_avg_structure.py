@@ -143,6 +143,6 @@ ffprint('Finished writing pdb of the average structure')
 
 # APPENDING INFORMATION TO A SUMMARY FILE
 out = open('%s' %(out_file),'a')
-out.write('%d   %d   %d' %(int(sys.argv[3]), end, nSteps))
+out.write('%d   %d   %d\n' %(int(sys.argv[3]), end, nSteps))
 out.close()
 
