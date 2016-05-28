@@ -87,7 +87,7 @@ temp = 0
 for ts in u.trajectory:
 #		dimensions = u.dimensions[:3]
 
-	u_all.translate(-u_all.center_of_mass())
+#	u_all.translate(-u_all.center_of_mass())
 
 #		for i in range(u_substrate_res):
 #			COM = np.zeros(3)
@@ -95,6 +95,7 @@ for ts in u.trajectory:
 #			t = wrapping(COM,dimensions)
 #			u_substrate.residues[i].atoms.translate(t)
 
+#	u_all.write('%02d.structure.pdb' %(ts.frame))
 	avgCoord += u_all.positions
 	avgAlign += u_align.positions
 	all_coord[temp] = u_all.positions
@@ -141,6 +142,13 @@ ffprint('Writing a pdb of the average structure.')
 avg_all.set_positions(avgCoord)
 avg_all.write('test.avg_structure.pdb')
 ffprint('Finished writing pdb of the average structure')
+
+u_all.set_positions(all_coord[0,:,:])
+u_all.translate(-u_all.center_of_mass())
+u_all.write('00.frame.pdb')
+u_all.set_positions(all_coord[1,:,:])
+u_all.write('01.frame.pdb')
+
 
 # APPENDING INFORMATION TO A SUMMARY FILE
 out = open('%s' %(out_file),'a')
