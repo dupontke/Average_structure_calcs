@@ -63,7 +63,7 @@ u_substrate_res = len(u_substrate.residues)
 temp = start
 nSteps = 0
 while temp <= end:
-	u.load_new('%sproduction.%s/production.%s.dcd' %(traj_loc,start,start))
+	u.load_new('%sproduction.%s/production.%s.dcd' %(traj_loc,temp,temp))
 	nSteps += len(u.trajectory)
 	temp += 1
 
