@@ -125,8 +125,8 @@ while residual > thresh and iteration < maxIter:
 		tempAvgCoord += all_coord[i,:,:]			# recalculate the average coordinates to optimize the average position
 	tempAvgCoord /= float(nSteps)				# finishing the average
 	tempAvgAlign /= float(nSteps)
-	residual = RMSD(avgAlign, tempAvgAlign)			# calculating the rmsd between avg and tempAvg to quantify our iterative optimization of the average positions	
-	rmsd_all = RMSD(avgCoord, tempAvgCoord)
+	residual = RMSD(avgAlign, tempAvgAlign, u_align_atoms)			# calculating the rmsd between avg and tempAvg to quantify our iterative optimization of the average positions	
+	rmsd_all = RMSD(avgCoord, tempAvgCoord, u_important_atoms)
 	iteration += 1
 	avgCoord = tempAvgCoord
 	avgAlign = tempAvgAlign

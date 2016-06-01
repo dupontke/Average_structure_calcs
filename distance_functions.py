@@ -15,29 +15,33 @@ zeros = np.zeros
 
 # SUBROUTINES:
 
-def RMSD(x,y):
+def RMSD(x,y,n):
 	""" Calculates the Root Mean Squared Distance between two arrays of the same size
 
-	Usage: rmsd = RMSD(x,y)
+	Usage: rmsd = RMSD(x,y,n)
+
+	Arguments:
+	x, y: numpy arrays with the same shape (n X 3)
+	n: number of particles being summed over; ex: number of atoms in the atom selection being analyzed;
+		if n = 1, this function calculates the distance between x and y arrays
+
+	"""
+	
+	return sqrt(sums(square(x-y))/n)
+
+def MSD(x,y,n):
+	""" Calculates the Mean Squared Distance between two arrays of the same size
+
+	Usage: msd = MSD(x,y,n)
 
 	Arguments:
 	x, y: numpy arrays with the same shape
-	
-	"""
-	
-	return sqrt(sums(square(x-y))/len(x))
+	n: number of particles being summed over; ex: number of atoms in the atom selection being analyzed;
+		if n = 1, this function calculates the distance squared between x and y arrays
 
-def MSD(x,y):
-	""" Calculates the Root Mean Squared Distance between two arrays of the same size
-
-	Usage: msd = MSD(x,y)
-
-	Arguments:
-	x, y: numpy arrays with the same shape
-	
 	"""
 
-	return sums(square(x-y))/len(x)
+	return sums(square(x-y))/n
 
 def wrapping(x,dim):
 	""" Calculates the translation matrix needed to wrap a particle back into the original periodic box
