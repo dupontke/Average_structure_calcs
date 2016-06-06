@@ -116,7 +116,7 @@ while residual > thresh and iteration < maxIter:
 
 ffprint('Average structure has converged')
 
-u_important.set_positions(avgCoord)
+u_important.positions = avgCoord
 u_important.write('%03d.%03d.average_structure.pdb' %(average_list[0][0],average_list[-1][1]))
 ffprint('Finished writing pdb of the average structure')
 

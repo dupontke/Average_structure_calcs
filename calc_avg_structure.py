@@ -136,7 +136,7 @@ ffprint('Average structure has converged')				# Now have the iteratively aligned
 # Print out pdb of average structure
 ffprint('Writing a pdb of the average structure.')
 #avg_important.residues.set_positions(avgCoord)
-avg_important.set_positions(avgCoord)
+avg_important.positions = avgCoord
 avg_important.write('%03d.%03d.avg_structure.pdb' %(int(sys.argv[3]),end))
 ffprint('Finished writing pdb of the average structure')
 
