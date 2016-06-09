@@ -107,8 +107,8 @@ while residual > thresh and iteration < maxIter:
 		tempAvgCoord += all_coord[i,:,:]
 	tempAvgCoord /= float(nAverages)
 	tempAvgAlign /= float(nAverages)
-	residual = RMSD(avgAlign,tempAvgAlign)
-	rmsd_all = RMSD(avgCoord,tempAvgCoord)
+	residual = RMSD(avgAlign,tempAvgAlign,u_align_atoms)
+	rmsd_all = RMSD(avgCoord,tempAvgCoord,u_important_atoms)
 	iteration += 1
 	avgCoord = tempAvgCoord
 	avgAlign = tempAvgAlign
