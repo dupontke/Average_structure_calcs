@@ -1,0 +1,10 @@
+#!/bin/bash 
+
+NPRODS=150
+
+for ((prod=1;prod<=$NPRODS;prod+=5))
+do
+	((a=$prod+4))
+	time ./calc_avg_structure.py ../truncated.pdb ../Trajectories/ $prod $a average_list.001.$NPRODS.output
+done
+
