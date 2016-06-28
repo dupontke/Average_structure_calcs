@@ -1,5 +1,4 @@
 #!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
-##!/mnt/lustre_fs/users/mjmcc/apps/python2.7/bin/python
 # ----------------------------------------
 # USAGE:
 
@@ -48,7 +47,6 @@ nSteps = np.sum(average_list[:,2])
 # LOAD IN THE PDB FILE TO BE USED AS THE AVERAGE STRUCTURE
 u = MDAnalysis.Universe(pdb_file)
 u_all = u.select_atoms('all')
-u_backbone = u.select_atoms('backbone')
 u_align = u.select_atoms(alignment)
 u_important = u.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
 u_substrate = u.select_atoms('nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
@@ -72,15 +70,12 @@ for i in range(nAverages):
 	temp = MDAnalysis.Universe('%03d.%03d.avg_structure.pdb' %(average_list[i][0],average_list[i][1]))
 	# INITIATING ATOM SELECTIONS
 	temp_all = temp.select_atoms('all')
-	temp_backbone = temp.select_atoms('backbone')
 	temp_align = temp.select_atoms(alignment)
 	temp_important = temp.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
 	temp_substrate = temp.select_atoms('nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
 
-	# TRANSLATING AND ROTATING AVERAGE STRUCTURES TO THE PDB STRUCTURE
-	temp_all.translate(-temp_backbone.center_of_mass())
-#	R, d = rotation_matrix(temp_align.positions, pos0)
-#	temp_all.rotate(R)
+	# TRANSLATING AVERAGE STRUCTURES TO THE PDB STRUCTURE
+	temp_all.translate(-temp_align.center_of_mass())
 
 	# UNWEIGHTING THE AVERAGE STRUCTURE
 	all_coord[i] = temp_important.positions

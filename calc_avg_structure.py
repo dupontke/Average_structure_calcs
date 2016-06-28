@@ -1,5 +1,4 @@
 #!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
-##!/mnt/lustre_fs/users/mjmcc/apps/python2.7/bin/python
 # ----------------------------------------
 # USAGE:
 
@@ -45,7 +44,6 @@ def ffprint(string):
 # LOAD IN THE UNIVERSE TO BE ANALYZED AND INITIATE THE NECESSARY ATOM SELECTIONS
 u = MDAnalysis.Universe(pdb_file)
 u_all = u.select_atoms('all')
-u_backbone = u.select_atoms('backbone')
 u_align = u.select_atoms(alignment)
 u_important = u.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
 u_substrate = u.select_atoms('nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
@@ -85,7 +83,7 @@ while start <= end:
 	for ts in u.trajectory:
 		dimensions = u.dimensions[:3]
 
-		u_all.translate(-u_backbone.center_of_mass())
+		u_all.translate(-u_align.center_of_mass())
 
 		for i in range(u_substrate_res):
 			COM = np.zeros(3)
@@ -135,7 +133,6 @@ ffprint('Average structure has converged')				# Now have the iteratively aligned
 
 # Print out pdb of average structure
 ffprint('Writing a pdb of the average structure.')
-#avg_important.residues.set_positions(avgCoord)
 avg_important.positions = avgCoord
 avg_important.write('%03d.%03d.avg_structure.pdb' %(int(sys.argv[3]),end))
 ffprint('Finished writing pdb of the average structure')
