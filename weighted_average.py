@@ -15,8 +15,8 @@ from distance_functions import *
 # ----------------------------------------
 # VARIABLE DECLARATION
 
-input_file = sys.argv[1]
-pdb_file = sys.argv[2]
+input_file = sys.argv[1]		# Format: 	start_traj	end_traj	number_of_frames
+pdb_file = sys.argv[2]			# Read in a pdb file to be used for atom selections and assigning positions
 
 alignment = 'protein and name CA and (resid 20:25 or resid 50:55 or resid 73:75 or resid 90:94 or resid 112:116 or resid 142:147 or resid 165:169 or resid 190:194 or resid 214:218 or resid 236:240 or resid 253:258 or resid 303:307)'
 
@@ -53,15 +53,15 @@ u_substrate = u.select_atoms('nucleic or resname A5 or resname A3 or resname U5 
 pos0 = u_align.positions
 
 # GRABBING IMPORTANT NUMBERS FROM THE UNIVERSE
-u_important_atoms = len(u_important.atoms)
-u_align_atoms = len(u_align.atoms)
-u_substrate_res = len(u_substrate.residues)
+u_important_atoms = u_important.n_atoms		#len(u_important.atoms)
+u_align_atoms = u_align.n_atoms			#len(u_align.atoms)
+u_substrate_res = u_substrate.n_residues	#len(u_substrate.residues)
 
 # ARRAY DECLARATION
-all_coord = zeros((nAverages,u_important_atoms,3),dtype=np.float32)
-avgCoord = zeros((u_important_atoms,3),dtype=np.float32)
-all_align = zeros((nAverages,u_align_atoms,3),dtype=np.float32)
-avgAlign = zeros((u_align_atoms,3),dtype=np.float32)
+all_coord = zeros((nAverages,u_important_atoms,3),dtype=np.float64)
+avgCoord = zeros((u_important_atoms,3),dtype=np.float64)
+all_align = zeros((nAverages,u_align_atoms,3),dtype=np.float64)
+avgAlign = zeros((u_align_atoms,3),dtype=np.float64)
 
 # AVERAGE STRUCTURE ANALYSIS
 ffprint('Beginning the averaging of averages process')
@@ -92,8 +92,8 @@ iteration = 0
 residual = thresh + 10.0 					# arbitrary assignment greater than thresh
 ffprint('Beginning iterative process of calculating average positions and aligning to the average')
 while residual > thresh and iteration < maxIter:		
-	tempAvgCoord = zeros((u_important_atoms,3),dtype=np.float32)		# zeroing out the tempAvgCoord array every iteration
-	tempAvgAlign = zeros((u_align_atoms,3),dtype=np.float32)
+	tempAvgCoord = zeros((u_important_atoms,3),dtype=np.float64)		# zeroing out the tempAvgCoord array every iteration
+	tempAvgAlign = zeros((u_align_atoms,3),dtype=np.float64)
 	for i in range(nAverages):
 		R, d = rotation_matrix(all_align[i,:,:],avgAlign)
 		all_align[i,:,:] = dot_prod(all_align[i,:,:],R.T)
@@ -114,4 +114,7 @@ ffprint('Average structure has converged')
 u_important.positions = avgCoord
 u_important.write('%03d.%03d.average_structure.pdb' %(average_list[0][0],average_list[-1][1]))
 ffprint('Finished writing pdb of the average structure')
+
+u_important.write('%03d.%03d.average_structure.dcd' %(average_list[0][0],average_list[-1][1]))
+ffprint('Finished writing dcd of the average structure')
 

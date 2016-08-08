@@ -53,25 +53,25 @@ avg_pdb = MDAnalysis.Universe(pdb_file)
 avg_important = avg_pdb.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
 
 # GRABBING IMPORTANT NUMBERS FROM THE UNIVERSE
-u_important_atoms = len(u_important.atoms)
-u_align_atoms = len(u_align.atoms)
-u_substrate_res = len(u_substrate.residues)
+u_important_atoms = u_important.n_atoms  	#len(u_important.atoms)
+u_align_atoms = u_align.n_atoms			#len(u_align.atoms)
+u_substrate_res = u_substrate.n_residues	#len(u_substrate.residues)
 
 # DETERMINING THE NUMBER OF STEPS TO BE AVERAGED OVER
-temp = start
 nSteps = 0
-while temp <= end:
-	u.load_new('%sproduction.%s/production.%s.dcd' %(traj_loc,temp,temp))
+while start <= end:
+	u.load_new('%sproduction.%s/production.%s.dcd' %(traj_loc,start,start))
 	nSteps += len(u.trajectory)
-	temp += 1
+	start += 1
 
 ffprint('Number of steps to be averaged over : %d' %(nSteps))
+start = int(sys.argv[3])
 
 # ARRAY DECLARATION
-all_coord = zeros((nSteps,u_important_atoms,3),dtype=np.float32)
-avgCoord = zeros((u_important_atoms,3),dtype=np.float32)
-all_align = zeros((nSteps,u_align_atoms,3),dtype=np.float32)
-avgAlign = zeros((u_align_atoms,3),dtype=np.float32)
+all_coord = zeros((nSteps,u_important_atoms,3),dtype=np.float64)
+avgCoord = zeros((u_important_atoms,3),dtype=np.float64)
+all_align = zeros((nSteps,u_align_atoms,3),dtype=np.float64)
+avgAlign = zeros((u_align_atoms,3),dtype=np.float64)
 
 # Trajectory Analysis: 
 ffprint('Beginning trajectory analysis')
@@ -100,7 +100,8 @@ while start <= end:
 
 ffprint(nSteps)
 if temp != nSteps:
-	ffprint('Failed to analyze all timesteps; fucked shit up')
+	ffprint('Failed to analyze all timesteps.')
+	sys.exit()
 
 avgCoord /= float(nSteps)
 avgAlign /= float(nSteps)
@@ -113,8 +114,8 @@ iteration = 0
 residual = thresh + 10.0 					# arbitrary assignment greater than thresh
 ffprint('Beginning iterative process of calculating average positions and aligning to the average')
 while residual > thresh and iteration < maxIter:		
-	tempAvgCoord = zeros((u_important_atoms,3),dtype=np.float32)		# zeroing out the tempAvgCoord array every iteration
-	tempAvgAlign = zeros((u_align_atoms,3),dtype=np.float32)
+	tempAvgCoord = zeros((u_important_atoms,3),dtype=np.float64)		# zeroing out the tempAvgCoord array every iteration
+	tempAvgAlign = zeros((u_align_atoms,3),dtype=np.float64)
 	for i in range(nSteps):
 		R, d = rotation_matrix(all_align[i,:,:],avgAlign)
 		all_align[i,:,:] = dot_prod(all_align[i,:,:],R.T)
@@ -137,7 +138,7 @@ avg_important.positions = avgCoord
 avg_important.write('%03d.%03d.avg_structure.pdb' %(int(sys.argv[3]),end))
 ffprint('Finished writing pdb of the average structure')
 
-# PRINT out dcd frame of average structure
+# PRINT out dcd frame of average structure; has more precision than the pdb format
 ffprint('Writing a dcd frame of the average structure.')
 avg_important.write('%03d.%03d.avg_structure.dcd' %(int(sys.argv[3]),end))
 ffprint('Finished writing dcd of the average structure')
