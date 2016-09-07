@@ -56,8 +56,15 @@ def config_parser(config_file):	# Function to take config file and create/fill t
 			sys.exit()
 
 def summary():
-	with open('%s.avg_structure.summary' %(system),'w') as f:
-		### output all the parameters used... need to ignore the __builtins__ dictionary key... ugh...
+	with open('%03d.%03d.%s.avg_structure.summary' %(parameters['start'],parameters['end'],parameters['system']),'w') as f:
+		f.write('Using MDAnalysis version: %s\n' %(MDAnalysis.version.__version__))
+		f.write('To recreate this analysis, run this line:\n')
+		for i in range(len(sys.argv)):
+			f.write('%s ' %(sys.argv[i]))
+		f.write('Used the parameters:\n')
+		for key,value in parameters.iteritems:
+			f.write('%s = %s\n' %(key,value))
+		f.write('\n\n')
 
 # ----------------------------------------
 # MAIN PROGRAM:
@@ -173,4 +180,7 @@ if parameters['write_dcd'] == True:
 if parameters['write_overview'] == True:
 	with open('%s_averaging.output' %(parameters['system']),'a') as f:
 		f.write('%d   %d   %d\n' %(parameters['start'],parameters['end'], nSteps))
+
+if parameters['write_summary'] == True:
+	summary()
 
