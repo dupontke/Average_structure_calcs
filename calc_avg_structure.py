@@ -1,7 +1,6 @@
 #!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
 # ----------------------------------------
 # USAGE:
-# ./calc_avg_structure.py pdb_file trajectory_location 1st_trajectory_# last_trajectory_# system_descripter avg_struct_filename
 # ./calc_avg_structure.py config_file
 
 # ----------------------------------------
@@ -79,13 +78,13 @@ avg_important = avg_pdb.select_atoms(parameters['important'])
 u = MDAnalysis.Universe(parameters['pdb_file'])
 u_align = u.select_atoms(parameters['alignment'])
 u_important = u.select_atoms(parameters['important'])
-if parameters['Wrapped'] != True:
+if not parameters['Wrapped']:		# Test to see if the 'Wrapped' key is equal to False
 	u_substrate = u.select_atoms(parameters['substrate'])
 
 # GRABBING IMPORTANT NUMBERS FROM THE UNIVERSE
 u_important_atoms = u_important.n_atoms  	#len(u_important.atoms)
 u_align_atoms = u_align.n_atoms			#len(u_align.atoms)
-if parameters['Wrapped'] != True:
+if not parameters['Wrapped']:		# Test to see if the 'Wrapped' key is equal to False
 	u_substrate_res = u_substrate.n_residues	#len(u_substrate.residues)
 
 # DETERMINING THE NUMBER OF STEPS TO BE AVERAGED OVER
@@ -115,7 +114,7 @@ while start <= parameters['end']:
 	for ts in u.trajectory:
 		u_important.translate(-u_align.center_of_mass())
 		
-		if parameters['Wrapped'] != True:
+		if not parameters['Wrapped']:		# Test to see if the 'Wrapped' key is equal to False
 			# CALCULATIONS that are unnecessary if the trajectory is wrapped.
 			dims = u.dimensions[:3]		
 			dims2 = dims/2.0
@@ -171,16 +170,16 @@ avg_important.write('%03d.%03d.%s.avg_structure.pdb' %(parameters['start'],param
 ffprint('Finished writing pdb of the average structure')
 
 # PRINT out dcd frame of average structure; has more precision than the pdb format
-if parameters['write_dcd'] == True:
+if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 	ffprint('Writing a dcd frame of the average structure.')
 	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end']),parameters['system'])
 	ffprint('Finished writing dcd of the average structure')
 
 # APPENDING INFORMATION TO THE OVERVIEW FILE
-if parameters['write_overview'] == True:
+if parameters['write_overview']:	# Test if 'write_overview' key is equal to True
 	with open('%s_averaging.output' %(parameters['system']),'a') as f:
 		f.write('%d   %d   %d\n' %(parameters['start'],parameters['end'], nSteps))
 
-if parameters['write_summary'] == True:
+if parameters['write_summary']:		# Test if 'write_summary' key is equal to True
 	summary()
 
