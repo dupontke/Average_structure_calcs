@@ -78,13 +78,11 @@ avg_important = avg_pdb.select_atoms(parameters['important'])
 u = MDAnalysis.Universe(parameters['pdb_file'])
 u_align = u.select_atoms(parameters['alignment'])
 u_important = u.select_atoms(parameters['important'])
-if not parameters['Wrapped']:		# Test to see if the 'Wrapped' key is equal to False
-	u_substrate = u.select_atoms(parameters['substrate'])
-
 # GRABBING IMPORTANT NUMBERS FROM THE UNIVERSE
 u_important_atoms = u_important.n_atoms  	#len(u_important.atoms)
 u_align_atoms = u_align.n_atoms			#len(u_align.atoms)
 if not parameters['Wrapped']:		# Test to see if the 'Wrapped' key is equal to False
+	u_substrate = u.select_atoms(parameters['substrate'])
 	u_substrate_res = u_substrate.n_residues	#len(u_substrate.residues)
 
 # DETERMINING THE NUMBER OF STEPS TO BE AVERAGED OVER
