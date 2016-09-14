@@ -23,7 +23,7 @@ flush = sys.stdout.flush
 
 config_file = sys.argv[1]	# Local or Global positon of the config file that holds all the values for the parameters
 
-necessary_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped']  # LEAVING OUT alignment, thresh, maxIter variables...
+necessary_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped','avg_filename']  # LEAVING OUT alignment, thresh, maxIter variables...
 all_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped','alignment','important','substrate','thresh','maxIter','write_dcd','write_summary','write_overview']
 parameters = {}
 
@@ -165,13 +165,13 @@ ffprint('Average structure has converged')				# Now have the iteratively aligned
 # Print out pdb of average structure
 ffprint('Writing a pdb of the average structure.')
 avg_important.positions = avgCoord
-avg_important.write('%03d.%03d.%s.avg_structure.pdb' %(parameters['start'],parameters['end'],parameters['system']))
+avg_important.write('%s.pdb' %(parameters['avg_filename']))
 ffprint('Finished writing pdb of the average structure')
 
 # PRINT out dcd frame of average structure; has more precision than the pdb format
 if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 	ffprint('Writing a dcd frame of the average structure.')
-	with MDAnalysis.Writer('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system']),avg_important.n_atoms) as W:
+	with MDAnalysis.Writer('%s.dcd' %(parameters['avg_filename']),avg_important.n_atoms) as W:
 		W.write(avg_important)
 #	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system']),avg_important.n_atoms)
 	ffprint('Finished writing dcd of the average structure')
