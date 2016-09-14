@@ -23,7 +23,7 @@ flush = sys.stdout.flush
 
 config_file = sys.argv[1]	# Local or Global positon of the config file that holds all the values for the parameters
 
-necessary_parameters = [pdb_file,traj_loc,start,end,system,Wrapped]  # LEAVING OUT alignment, thresh, maxIter variables...
+necessary_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped']  # LEAVING OUT alignment, thresh, maxIter variables...
 
 # ----------------------------------------
 # SUBROUTINES:
