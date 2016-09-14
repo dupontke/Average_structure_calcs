@@ -23,8 +23,8 @@ flush = sys.stdout.flush
 
 config_file = sys.argv[1]	# Local or Global positon of the config file that holds all the values for the parameters
 
-necessary_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped','avg_filename']  # LEAVING OUT alignment, thresh, maxIter variables...
-all_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped','alignment','important','substrate','thresh','maxIter','write_dcd','write_summary','write_overview']
+necessary_parameters = ['pdb_file','traj_loc','start','end','Wrapped','avg_filename']  # LEAVING OUT alignment, thresh, maxIter variables...
+all_parameters = ['pdb_file','traj_loc','start','end','Wrapped','alignment','important','substrate','thresh','maxIter','write_dcd','write_summary','write_overview','overview_filename']
 parameters = {}
 
 # ----------------------------------------
@@ -47,6 +47,7 @@ def config_parser(config_file):	# Function to take config file and create/fill t
 	parameters['write_dcd'] = False
 	parameters['write_summary'] = False
 	parameters['write_overview'] = False
+	parameters['overview_filename'] = None
 	
 	# GRABBING PARAMETER VALUES FROM THE CONFIG FILE:
 	execfile(config_file,parameters)
@@ -56,7 +57,7 @@ def config_parser(config_file):	# Function to take config file and create/fill t
 			sys.exit()
 
 def summary():
-	with open('%03d.%03d.%s.avg_structure.summary' %(parameters['start'],parameters['end'],parameters['system']),'w') as f:
+	with open('%s.summary' %(parameters['avg_filename']),'w') as f:
 		f.write('Using MDAnalysis version: %s\n' %(MDAnalysis.version.__version__))
 		f.write('To recreate this analysis, run this line:\n')
 		for i in range(len(sys.argv)):
@@ -173,12 +174,11 @@ if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 	ffprint('Writing a dcd frame of the average structure.')
 	with MDAnalysis.Writer('%s.dcd' %(parameters['avg_filename']),avg_important.n_atoms) as W:
 		W.write(avg_important)
-#	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system']),avg_important.n_atoms)
 	ffprint('Finished writing dcd of the average structure')
 
 # APPENDING INFORMATION TO THE OVERVIEW FILE
 if parameters['write_overview']:	# Test if 'write_overview' key is equal to True
-	with open('%s_averaging.output' %(parameters['system']),'a') as f:
+	with open('%s' %(parameters['overview_filename']),'a') as f:
 		f.write('%d   %d   %d\n' %(parameters['start'],parameters['end'], nSteps))
 
 if parameters['write_summary']:		# Test if 'write_summary' key is equal to True

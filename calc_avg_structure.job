@@ -1,10 +1,16 @@
 #!/bin/bash 
 
-NPRODS=150
+NPRODS=10
 
 for ((prod=1;prod<=$NPRODS;prod+=5))
 do
-	((a=$prod+4))
-	time ./calc_avg_structure.py ../truncated.pdb ../Trajectories/ $prod $a average_list.001.$NPRODS.output
+	((b=$prod+4))
+	printf -v x "%03d" $prod
+	printf -v y "%03d" $b
+	mkdir $x.$y.avg_structure
+	cd $x.$y.avg_structure
+	sed -e s/AAA/$prod/g -e s/BBB/$b/g -e s/XXX/$x/g -e s/YYY/$y/g < ../calc_avg_structure.config > $x.$y.avg_structure.config
+	time ../calc_avg_structure.py $x.$y.avg_structure.config > $x.$y.averaging.output
+	cd ../
 done
 
