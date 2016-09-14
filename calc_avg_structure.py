@@ -170,7 +170,7 @@ ffprint('Finished writing pdb of the average structure')
 # PRINT out dcd frame of average structure; has more precision than the pdb format
 if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 	ffprint('Writing a dcd frame of the average structure.')
-	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end']),parameters['system'])
+	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system'])
 	ffprint('Finished writing dcd of the average structure')
 
 # APPENDING INFORMATION TO THE OVERVIEW FILE
