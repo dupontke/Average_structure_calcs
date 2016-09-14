@@ -24,6 +24,8 @@ flush = sys.stdout.flush
 config_file = sys.argv[1]	# Local or Global positon of the config file that holds all the values for the parameters
 
 necessary_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped']  # LEAVING OUT alignment, thresh, maxIter variables...
+all_parameters = ['pdb_file','traj_loc','start','end','system','Wrapped','alignment','important','substrate','thresh','maxIter','write_dcd','write_summary','write_overview']
+parameters = {}
 
 # ----------------------------------------
 # SUBROUTINES:
@@ -33,7 +35,6 @@ def ffprint(string):		# Useful function to use when on a system that has a large
 	flush()
 
 def config_parser(config_file):	# Function to take config file and create/fill the parameter dictionary 
-	parameters = {}
 	for i in range(len(necessary_parameters)):
 		parameters[necessary_parameters[i]] = ''
 
@@ -49,7 +50,7 @@ def config_parser(config_file):	# Function to take config file and create/fill t
 	
 	# GRABBING PARAMETER VALUES FROM THE CONFIG FILE:
 	execfile(config_file,parameters)
-	for key, value in parameters.iteritems:
+	for key, value in parameters.iteritems():
 		if value == '':
 			print '%s has not been assigned a value. This variable is necessary for the script to run. Please declare this variable within the config file.'
 			sys.exit()
@@ -60,9 +61,9 @@ def summary():
 		f.write('To recreate this analysis, run this line:\n')
 		for i in range(len(sys.argv)):
 			f.write('%s ' %(sys.argv[i]))
-		f.write('Used the parameters:\n')
-		for key,value in parameters.iteritems:
-			f.write('%s = %s\n' %(key,value))
+		f.write('\nParameters used:\n')
+		for i in all_parameters:
+			f.write('%s = %s \n' %(i, parameters[i]))
 		f.write('\n\n')
 
 # ----------------------------------------
@@ -170,7 +171,9 @@ ffprint('Finished writing pdb of the average structure')
 # PRINT out dcd frame of average structure; has more precision than the pdb format
 if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 	ffprint('Writing a dcd frame of the average structure.')
-	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system'])
+	with MDAnalysis.Writer('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system']),avg_important.n_atoms) as W:
+		W.write(avg_important)
+#	avg_important.write('%03d.%03d.%s.avg_structure.dcd' %(parameters['start'],parameters['end'],parameters['system']),avg_important.n_atoms)
 	ffprint('Finished writing dcd of the average structure')
 
 # APPENDING INFORMATION TO THE OVERVIEW FILE
