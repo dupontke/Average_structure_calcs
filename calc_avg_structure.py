@@ -178,7 +178,7 @@ if parameters['write_dcd']:		# Test if 'write_dcd' key is equal to True
 
 # APPENDING INFORMATION TO THE OVERVIEW FILE
 if parameters['write_overview']:	# Test if 'write_overview' key is equal to True
-	with open('%s' %(parameters['overview_filename']),'a') as f:
+	with open('../%s' %(parameters['overview_filename']),'a') as f:
 		f.write('%d   %d   %d\n' %(parameters['start'],parameters['end'], nSteps))
 
 if parameters['write_summary']:		# Test if 'write_summary' key is equal to True
