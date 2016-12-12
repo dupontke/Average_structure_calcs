@@ -17,8 +17,9 @@ from distance_functions import *
 
 input_file = sys.argv[1]		# Format: 	start_traj	end_traj	number_of_frames
 pdb_file = sys.argv[2]			# Read in a pdb file to be used for atom selections and assigning positions
+system = sys.argv[3]                    # system of trajectory
 
-alignment = 'protein and name CA and (resid 20:25 or resid 50:55 or resid 73:75 or resid 90:94 or resid 112:116 or resid 142:147 or resid 165:169 or resid 190:194 or resid 214:218 or resid 236:240 or resid 253:258 or resid 303:307)'
+alignment = 'protein and name CA and (resid 15:23 or resid 50:60 or resid 68:73 or resid 79:86 or resid 90:96 or resid 117:120 or resid 135:138 or resid 150:161 or resid 170:175 or resid 182:193 or resid 197:199 or resid 211:214 or resid 222:236)'
 
 zeros = np.zeros
 dot_prod = np.dot
@@ -48,8 +49,8 @@ nSteps = np.sum(average_list[:,2])
 u = MDAnalysis.Universe(pdb_file)
 u_all = u.select_atoms('all')
 u_align = u.select_atoms(alignment)
-u_important = u.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
-u_substrate = u.select_atoms('nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
+u_important = u.select_atoms('protein or resname GTP or resname SAH or resname MG')
+u_substrate = u.select_atoms('resname GTP or resname SAH or resname MG')
 pos0 = u_align.positions
 
 # GRABBING IMPORTANT NUMBERS FROM THE UNIVERSE
@@ -67,12 +68,12 @@ avgAlign = zeros((u_align_atoms,3),dtype=np.float64)
 ffprint('Beginning the averaging of averages process')
 for i in range(nAverages):
 	ffprint('Loading in the average structure of Trajectories %d to %d' %(average_list[i][0],average_list[i][1]))
-	temp = MDAnalysis.Universe('%03d.%03d.avg_structure.pdb' %(average_list[i][0],average_list[i][1]))
+	temp = MDAnalysis.Universe('%03d.%03d.avg_structure/%03d.%03d.%s.avg_structure.pdb' %(average_list[i][0],average_list[i][1],average_list[i][0],average_list[i][1],system))
 	# INITIATING ATOM SELECTIONS
 	temp_all = temp.select_atoms('all')
 	temp_align = temp.select_atoms(alignment)
-	temp_important = temp.select_atoms('protein or nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
-	temp_substrate = temp.select_atoms('nucleic or resname A5 or resname A3 or resname U5 or resname atp or resname adp or resname PHX or resname MG')
+	temp_important = temp.select_atoms('protein or resname GTP or resname SAH or resname MG')
+	temp_substrate = temp.select_atoms('resname GTP or resname SAH or resname MG')
 
 	# TRANSLATING AVERAGE STRUCTURES TO THE PDB STRUCTURE
 	temp_all.translate(-temp_align.center_of_mass())
