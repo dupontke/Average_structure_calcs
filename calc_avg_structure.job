@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-NPRODS=10
+NPRODS=40
 
 for ((prod=1;prod<=$NPRODS;prod+=5))
 do
