@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-NPRODS=40
+NPRODS=100
 
 for ((prod=1;prod<=$NPRODS;prod+=5))
 do
@@ -13,4 +13,3 @@ do
 	time ../calc_avg_structure.py $x.$y.avg_structure.config > $x.$y.averaging.output
 	cd ../
 done
-
